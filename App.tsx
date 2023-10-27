@@ -5,9 +5,12 @@
  * @format
  */
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
+import React, { useState } from 'react';
+
 import {
+  Button,
+  FlatList,
+  Image,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -25,55 +28,65 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import MyComp from './my-comp';
 
 
 function App(): JSX.Element {
-  
-  const age = 20;
-  //age = 30;
 
-  const myArr = [1,2,3];
-  //myArr = [4,5,6];
+  const [inputText, setInputText] = useState('');
 
-  myArr[3] = 4;
+  let condition = false;
+  let dynamicStyles = condition ? styles.text : styles.textRed;
 
-  let newArr = [...myArr, 4];
+  const data = [];
+  for (let n = 0; n < 20; n++) {
+    const item = { "id": n, "text": `Item ${n}`};
+    data.push(item);    
+  }
 
-  //functionCall((arg) => {});
+  const renderItem = ({...item}) => <Text>{item.text}</Text> 
 
-  let name = "Harry";
+  const handleTextInput = (text) => {
+    setInputText(text);
+  }
 
-  let welcome = "Welcome, " + name + " to my first app";
-  let welcome2 = `Welcome ${name}`;
+  const handlePress = () => {
+    //some code..
+  }
 
   return (
-    <View>
+    <ScrollView style={styles.container}>
       <Text>CPRG_303_E: Lab Assignment 1: Spinning Up React Native App</Text>
-      <Text>Hello World!</Text>
-      <Text>Hello, {name}</Text>
-      <TextInput defaultValue={name} />
-      <Text>{welcome}</Text>
-    </View>
+      <Text style={dynamicStyles}>Hello World!</Text>
+      <MyComp />
+      <Image source={require("./cat.jpg")} style={styles.image} />
+      <TextInput placeholder='Please enter your name' value={inputText} onChangeText={handleTextInput} />
+      <Button title="A Button!" onPress={handlePress} />
+      <FlatList data={data} renderItem={renderItem} />
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    flex: 1,
+    paddingTop: 20,
+    //alignItems: 'center'
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  text: {
+    fontSize: 20,
+    color: 'green'
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  textRed: {
+    fontSize: 20,
+    color: 'red'
   },
-  highlight: {
-    fontWeight: '700',
-  },
+  image:{
+    width: 200,
+    height: 150,
+  }
 });
+
+
 
 export default App;
